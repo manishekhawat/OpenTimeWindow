@@ -64,21 +64,35 @@ export async function fetchCommonsPhotos(
     generator: 'geosearch',
     ggscoord: `${lat}|${lon}`,
     ggsradius: String(radius),
-    ggslimit: '100',
+    ggslimit: '500', // more candidates: most nearby files are modern
     ggsnamespace: '6', // File: namespace
     prop: 'imageinfo|coordinates',
+    colimit: 'max', // default is only 10 pages' coordinates per response
     iiprop: 'url|size|extmetadata|mime',
     iiurlwidth: '1280',
     iiextmetadatafilter:
       'DateTimeOriginal|DateTime|ObjectName|Artist|LicenseShortName|Categories',
   });
 
-  const res = await fetch(`${API}?${params}`, {
-    headers: WIKIMEDIA_HEADERS,
-  });
-  if (!res.ok) throw new Error(`Commons request failed (${res.status})`);
-  const json = await res.json();
-  const pages: any[] = json?.query?.pages ?? [];
+  // Commons may split image details across several responses ("continue"); merge them by page.
+  const pagesById = new Map<number, any>();
+  let cont: Record<string, string> | undefined = {};
+  for (let i = 0; cont && i < 8; i++) {
+    const res: Response = await fetch(`${API}?${params}&${new URLSearchParams(cont)}`, { headers: WIKIMEDIA_HEADERS });
+    if (!res.ok) throw new Error(`Commons request failed (${res.status})`);
+    const json: any = await res.json();
+    for (const p of json?.query?.pages ?? []) {
+      const prev = pagesById.get(p.pageid) ?? {};
+      pagesById.set(p.pageid, {
+        ...prev,
+        ...p,
+        imageinfo: p.imageinfo ?? prev.imageinfo,
+        coordinates: p.coordinates ?? prev.coordinates,
+      });
+    }
+    cont = json?.continue;
+  }
+  const pages = [...pagesById.values()];
 
   const photos: ThenPhoto[] = [];
   for (const p of pages) {

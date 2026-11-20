@@ -6,10 +6,12 @@ Point your phone at a street and see it as it looked decades ago. OpenTimeWindow
 geotagged photos near you, walks you to the spot where the photographer stood, and lays the
 old photo over your live camera view.
 
-## Features (v0.1)
+## Features (v0.2)
 
 - **Nearby old photos** from [Wikimedia Commons](https://commons.wikimedia.org), filtered by era
   (before 1950 / 1975 / 2000) and radius (500 m to 10 km).
+- **Never a dead end**: if nothing turns up, the search widens (up to 10 km, then later eras) and says so.
+- **Map view** of old-photo spots around you (Leaflet + OpenStreetMap/CARTO tiles, no API key needed).
 - **Walk-to-spot guidance**: distance and a compass arrow that points to where the camera stood.
 - **Alignment help**: when a photo's camera direction is known (curated photos), the app tells you
   which way to turn, plus a tilt hint.
@@ -36,6 +38,7 @@ Checks: `npx tsc --noEmit` and `npx expo lint`.
 ```
 src/app/            Expo Router screens (index = nearby list, window = camera view)
 src/screens/        Screen components
+src/components/     Map (WebView + Leaflet)
 src/services/       Commons API, geo math, photo search
 src/hooks/          Location, compass heading, tilt
 src/data/curated.ts Hand-picked photos with known camera direction
