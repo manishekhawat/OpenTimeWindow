@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "OpenTimeWindow",
+    "slug": "opentimewindow",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.manishekhawat.opentimewindow"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1b1712",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.manishekhawat.opentimewindow"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "OpenTimeWindow uses the camera to overlay old photos on the live view.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "OpenTimeWindow uses your location to find old photos taken near you."
+        }
+      ],
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "OpenTimeWindow uses motion data to help you line up the old photo."
+        }
+      ]
+    ],
+    "scheme": "opentimewindow"
+  }
+}
