@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocation } from '../hooks/useSensors';
 import { compassLabel, formatDistance } from '../services/geo';
 import { findNearbyPhotos } from '../services/photos';
+import { commonsImage } from '../services/commons';
 import { NearbyPhoto } from '../types';
 
 const RADII = [500, 1000, 3000, 10000];
@@ -93,7 +94,7 @@ export default function NearbyScreen({ onOpen }: Props) {
           }
           renderItem={({ item }) => (
             <Pressable style={styles.card} onPress={() => onOpen(item)}>
-              <Image source={{ uri: item.thumbUrl }} style={styles.thumb} />
+              <Image source={commonsImage(item.thumbUrl)} style={styles.thumb} />
               <View style={styles.cardBody}>
                 <Text style={styles.year}>{item.year}</Text>
                 <Text style={styles.title} numberOfLines={2}>

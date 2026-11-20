@@ -15,6 +15,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeading, useLocation, useTilt } from '../hooks/useSensors';
 import { angleDiff, bearing, compassLabel, distance, formatDistance } from '../services/geo';
+import { commonsImage } from '../services/commons';
 import { NearbyPhoto } from '../types';
 
 type Mode = 'fade' | 'wipe';
@@ -69,7 +70,7 @@ export default function TimeWindowScreen({ photo, onClose }: Props) {
   const guidance = getGuidance(photo, coords, heading, tilt);
   const image = (
     <Image
-      source={{ uri: photo.imageUrl }}
+      source={commonsImage(photo.imageUrl)}
       resizeMode="contain"
       style={{
         position: 'absolute',

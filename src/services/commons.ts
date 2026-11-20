@@ -7,6 +7,21 @@ import { ThenPhoto } from '../types';
  */
 const API = 'https://commons.wikimedia.org/w/api.php';
 
+/**
+ * Wikimedia rejects (HTTP 403) requests with generic user agents such as
+ * Android's default "okhttp/x". Their policy asks for an app name plus contact URL.
+ * https://foundation.wikimedia.org/wiki/Policy:Wikimedia_Foundation_User-Agent_Policy
+ */
+export const WIKIMEDIA_USER_AGENT =
+  'OpenTimeWindow/0.1 (https://github.com/manishekhawat/OpenTimeWindow) react-native';
+export const WIKIMEDIA_HEADERS = {
+  'User-Agent': WIKIMEDIA_USER_AGENT,
+  'Api-User-Agent': WIKIMEDIA_USER_AGENT,
+};
+
+/** Image source for Commons files, carrying the required user agent. */
+export const commonsImage = (uri: string) => ({ uri, headers: WIKIMEDIA_HEADERS });
+
 const stripHtml = (s?: string) => (s ?? '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
 
 /** Pull a plausible year (1826–2099) out of free-form date text or categories. */
@@ -59,7 +74,7 @@ export async function fetchCommonsPhotos(
   });
 
   const res = await fetch(`${API}?${params}`, {
-    headers: { 'Api-User-Agent': 'OpenTimeWindow/0.1 (React Native app)' },
+    headers: WIKIMEDIA_HEADERS,
   });
   if (!res.ok) throw new Error(`Commons request failed (${res.status})`);
   const json = await res.json();
